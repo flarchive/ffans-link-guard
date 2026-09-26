@@ -1,0 +1,410 @@
+// Page.bodyClass is applied and removed by Flarum's native Page lifecycle.
+// Hide the surrounding shell without unmounting it or discarding composer drafts.
+body:has(#app.App--linkGuard) {
+  background: var(--body-bg);
+  overflow-y: auto;
+
+  > :not(#app) {
+    display: none !important;
+  }
+}
+
+#app.App--linkGuard {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+
+  > :not(.App-content),
+  > .App-content > :not(#content),
+  #content > :not(.LinkGuardPage) {
+    display: none !important;
+  }
+
+  > .App-content {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.LinkGuardPage {
+  --link-guard-secondary: color-mix(in srgb, var(--text-color) 72%, var(--body-bg));
+
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: ~"clamp(64px, 16vh, 150px)" 32px 56px;
+  background: var(--body-bg);
+  color: var(--text-color);
+  overflow-wrap: anywhere;
+}
+
+.LinkGuardPage-content {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.ModalManager:has(> .LinkGuardModal) {
+  display: flex;
+  padding: 24px;
+
+  &::before {
+    display: none;
+  }
+}
+
+.LinkGuardModal {
+  --link-guard-secondary: color-mix(in srgb, var(--text-color) 72%, var(--body-bg));
+
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 460px;
+  margin: auto;
+  top: 0;
+  border-radius: 16px;
+  box-shadow: 0 20px 64px var(--shadow-color);
+  color: var(--text-color);
+  overflow-wrap: anywhere;
+
+  // Core waits for transitionend to finish closing, including on phones.
+  &.fade {
+    opacity: 0;
+  }
+
+  &.in {
+    opacity: 1;
+  }
+
+  .Modal-content {
+    min-height: 0;
+    padding: 28px;
+    border-radius: inherit;
+    background: var(--body-bg);
+    color: var(--text-color);
+  }
+
+  .Modal-close {
+    position: absolute !important;
+    inset: 12px 12px auto auto;
+    top: 12px !important;
+    z-index: 2;
+
+    > .Button {
+      width: 44px;
+      height: 44px;
+      padding: 12px !important;
+      color: var(--link-guard-secondary) !important;
+      border-radius: 8px;
+
+      .Button-icon {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .Button:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+  }
+
+  // Flarum 1.x renders the title in Modal-header, including a mobile navbar class.
+  .Modal-header {
+    padding: 0;
+    text-align: left;
+
+    h3.App-titleControl {
+      position: static !important;
+      display: block;
+      width: auto;
+      max-width: none;
+      height: auto;
+      padding: 0;
+      margin: 0;
+      overflow: visible;
+      white-space: normal;
+      text-align: left;
+      line-height: normal;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 0.01s;
+  }
+}
+
+.LinkGuardModal-heading {
+  display: block;
+
+  .LinkGuardModal-title {
+    display: block;
+    margin: 20px 0 0;
+    color: var(--heading-color);
+    font-size: 22px;
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+}
+
+.LinkGuardModal-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--control-bg);
+  color: var(--primary-color);
+  font-size: 19px;
+}
+
+.LinkGuardModal-message {
+  margin: 10px 0 0;
+  white-space: pre-line;
+  color: var(--link-guard-secondary);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.LinkGuardModal-destination {
+  margin: 24px 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--control-bg);
+
+  dt {
+    color: var(--link-guard-secondary);
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 5px;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  .LinkGuardModal-host {
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+  }
+
+  .LinkGuardModal-url {
+    margin-top: 6px;
+    color: var(--link-guard-secondary);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+}
+
+.LinkGuardModal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+
+  .Button {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: normal;
+    gap: 10px;
+  }
+
+  .Button--outline {
+    --button-color: var(--text-color);
+    // Stretch 1px above and below the filled button for optical balance.
+    margin-block: -1px;
+  }
+}
+
+@media @phone {
+  .ModalManager:has(> .LinkGuardModal) {
+    padding: 16px;
+  }
+
+  .LinkGuardModal .Modal-content {
+    padding: 24px;
+  }
+
+  .LinkGuardModal-heading .LinkGuardModal-title {
+    font-size: 20px;
+  }
+
+  .LinkGuardModal-actions {
+    gap: 10px;
+
+    .Button {
+      padding-inline: 12px;
+    }
+  }
+}
+
+// Flarum 1.x has no outline variant or flex alignment for plain anchor buttons.
+.LinkGuardPage-actions,
+.LinkGuardModal-actions {
+  .Button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .Button--outline {
+    background: transparent;
+    border: 1px solid var(--control-bg);
+    color: var(--text-color);
+
+    &:hover,
+    &:focus {
+      background: var(--control-bg);
+    }
+  }
+}
+
+.LinkGuardPage-brand {
+  margin-bottom: 34px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--heading-color);
+
+  .Header-logo {
+    max-width: 100%;
+    max-height: 24px;
+    width: auto;
+    height: auto;
+    vertical-align: middle;
+  }
+}
+
+.LinkGuardPage-notice {
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 650;
+    line-height: 1.45;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+}
+
+.LinkGuardPage-message {
+  margin: 10px 0 0;
+  white-space: pre-line;
+  color: var(--link-guard-secondary);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.LinkGuardPage-destination {
+  margin: 28px 0 0;
+  padding: 21px 24px 22px;
+  background: var(--body-bg-shaded);
+  border-radius: 12px;
+
+  dt {
+    color: var(--link-guard-secondary);
+    font-size: 12px;
+    margin-bottom: 5px;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+.LinkGuardPage-host {
+  font-size: 23px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+
+.LinkGuardPage-url {
+  .LinkGuardPage-destination & {
+    margin-top: 8px;
+  }
+
+  color: var(--link-guard-secondary);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.75;
+}
+
+.LinkGuardPage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+
+  .Button {
+    padding: 11px 22px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: normal;
+    gap: 10px;
+
+    &:focus-visible {
+      outline: 2px solid var(--primary-color);
+      outline-offset: 3px;
+    }
+  }
+
+  .Button--outline {
+    --button-color: var(--text-color);
+    margin-block: -1px;
+  }
+}
+
+.LinkGuardPage-footer {
+  margin: 20px 0 0;
+  color: var(--link-guard-secondary);
+  font-size: 13px;
+  line-height: 1.75;
+
+  a {
+    text-underline-offset: 3px;
+  }
+}
+
+@media (max-width: 600px) {
+  .LinkGuardPage {
+    padding: 48px 24px 40px;
+  }
+
+  .LinkGuardPage-brand {
+    margin-bottom: 30px;
+    font-size: 15px;
+  }
+
+  .LinkGuardPage-notice h1 {
+    font-size: 25px;
+  }
+
+  .LinkGuardPage-destination {
+    padding: 18px 20px;
+  }
+
+  .LinkGuardPage-host {
+    font-size: 22px;
+  }
+
+  .LinkGuardPage-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 26px;
+
+    .Button {
+      padding: 11px 12px;
+    }
+  }
+
+  .LinkGuardPage-invalid .LinkGuardPage-actions {
+    grid-template-columns: 1fr;
+  }
+}

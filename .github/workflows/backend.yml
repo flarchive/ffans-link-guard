@@ -1,0 +1,13 @@
+name: FFans Link Guard PHP
+
+on: [workflow_dispatch, push, pull_request]
+
+jobs:
+  run:
+    uses: flarum/framework/.github/workflows/REUSABLE_backend.yml@1.x
+    with:
+      enable_backend_testing: true
+      php_versions: '["8.0", "8.1", "8.2", "8.3"]'
+      php_extensions: 'curl, dom, gd, json, mbstring, openssl, pdo_mysql, pdo_sqlite, pdo_pgsql, tokenizer, zip'
+
+      backend_directory: .

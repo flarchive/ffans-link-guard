@@ -1,0 +1,24 @@
+ffans-link-guard:
+  admin:
+    settings:
+      warning_title_label: 警告标题
+      warning_title_help: 留空时使用默认标题。仅支持纯文本。
+      warning_message_label: 警告内容
+      warning_message_help: 留空时使用默认安全提示。仅支持纯文本，可换行。
+      trusted_domains_label: 可信域名
+      trusted_domains_help: 一行一个域名，同源链接默认跳过提示。<code>example.com</code> 仅匹配该域名。<code>*.example.com</code> 匹配其子域，但不包含 <code>example.com</code> 本身。
+      use_modal_label: 使用弹窗提示
+      use_modal_help: 在当前页面弹窗提示，继续访问会在新标签页打开目标网址。
+  forum:
+    page_title: 跳转提示
+    destination_label: 目标网站
+    invalid_title: 无效的外部链接
+    invalid_message: 这个地址无法被安全识别，请返回社区后重新打开。
+    close_button: 关闭此页
+    cancel_button: 取消
+    continue_button: 继续访问
+    close_fallback: 如果此页未能关闭，请手动关闭标签页，或 <a>返回社区</a>。
+  lib:
+    default_forum_name: 本站
+    default_warning_title: "即将离开 {forumName}"
+    default_warning_message: 请注意账号财产安全。
